@@ -6,7 +6,6 @@ type StarsProps = {
 };
 
 const Stars: React.FC<StarsProps> = ({ rating }) => {
-  // Yulduzlarni hisoblash funksiyasi
   function calculateStar(n: number): number {
     if (n === 0 || n.toString().length === 1) return n;
 

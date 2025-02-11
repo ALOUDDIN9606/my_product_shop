@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaBars, FaTimes } from "react-icons/fa";
 import { IoCartOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import { useGetMeQuery } from "../../redux/api/auth";
 
 const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const {data} = useGetMeQuery({})
-  console.log(data);
-  
-  
+  const { data } = useGetMeQuery({});
 
   const handleInputChange = (event: any) => {
     setSearchQuery(event.target.value);
@@ -19,12 +17,15 @@ const Header: React.FC = () => {
 
   return (
     <header className="w-full border-b sticky top-0 z-50 bg-white shadow-md">
+      {/* Top Sale Banner */}
       <div className="w-full bg-black text-white text-center py-2 text-sm">
         Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!{" "}
-        <span className="font-semibold cursor-pointer">ShopNow</span>
+        <span className="font-semibold cursor-pointer">Shop Now</span>
       </div>
 
-      <nav className="flex items-center justify-between container py-4">
+      {/* Navigation */}
+      <nav className="flex items-center justify-between container mx-auto px-4 py-4">
+        {/* Logo */}
         <h1
           onClick={() => navigate("/")}
           className="text-3xl font-bold cursor-pointer"
@@ -32,7 +33,8 @@ const Header: React.FC = () => {
           Exclusive
         </h1>
 
-        <ul className="flex gap-8 text-xl text-gray-700">
+        {/* Desktop Navigation */}
+        <ul className="hidden md:flex gap-8 text-lg text-gray-700">
           <li>
             <NavLink
               to="/"
@@ -75,14 +77,16 @@ const Header: React.FC = () => {
           </li>
         </ul>
 
+        {/* Icons & Search */}
         <div className="flex items-center gap-4">
-          <div className="relative">
+          {/* Search Input (hidden on small screens) */}
+          <div className="relative hidden sm:block">
             <input
               type="text"
               value={searchQuery}
               onChange={handleInputChange}
               placeholder="Search..."
-              className="w-full py-2 pr-10 pl-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-40 py-2 pr-10 pl-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
             <svg
               className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500"
@@ -98,28 +102,32 @@ const Header: React.FC = () => {
               <line x1="16.7" y1="16.7" x2="21" y2="21"></line>
             </svg>
           </div>
+
+          {/* Wishlist Icon */}
           <NavLink
             to="/wishlist"
             className={({ isActive }) =>
-              isActive ? "text-red-500 font-semibold" : "hover:text-black"
+              isActive ? "text-red-500 font-semibold" : "hover:text-red-500"
             }
           >
             <FaRegHeart className="text-2xl" />
           </NavLink>
 
+          {/* Cart Icon */}
           <NavLink
             to="/cart"
             className={({ isActive }) =>
-              isActive ? "text-red-500 font-semibold" : "hover:text-black"
+              isActive ? "text-red-500 font-semibold" : "hover:text-red-500 cursor-pointer"
             }
           >
-            <IoCartOutline className="text-3xl" />
+            <IoCartOutline className="text-3xl cursor-pointer" />
           </NavLink>
 
+          {/* User Account */}
           <NavLink
-            to="/auth/account"
+            to="/signup"
             className={({ isActive }) =>
-              isActive ? "text-red-500 font-semibold" : "hover:text-black"
+              isActive ? "text-red-500 font-semibold" : "hover:text-red-500"
             }
           >
             {data ? (
@@ -130,8 +138,65 @@ const Header: React.FC = () => {
               <FaRegUser className="text-2xl" />
             )}
           </NavLink>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-2xl focus:outline-none"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <FaTimes /> : <FaBars />}
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Menu */}
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-50 z-50 ${
+          menuOpen ? "block" : "hidden"
+        }`}
+        onClick={() => setMenuOpen(false)}
+      >
+        <div
+          className="absolute top-0 left-0 w-3/4 h-full bg-white shadow-lg flex flex-col py-6 px-4 space-y-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            className="text-2xl self-end mb-6"
+            onClick={() => setMenuOpen(false)}
+          >
+            <FaTimes />
+          </button>
+
+          <NavLink
+            to="/"
+            className="text-lg font-semibold hover:text-blue-500"
+            onClick={() => setMenuOpen(false)}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className="text-lg font-semibold hover:text-blue-500"
+            onClick={() => setMenuOpen(false)}
+          >
+            Contact
+          </NavLink>
+          <NavLink
+            to="/about"
+            className="text-lg font-semibold hover:text-blue-500"
+            onClick={() => setMenuOpen(false)}
+          >
+            About
+          </NavLink>
+          <NavLink
+            to="/signin"
+            className="text-lg font-semibold hover:text-blue-500"
+            onClick={() => setMenuOpen(false)}
+          >
+            SignIn
+          </NavLink>
+        </div>
+      </div>
     </header>
   );
 };

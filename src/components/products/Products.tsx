@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useGetProductsQuery } from "../../redux/api/product";
 import { IProduct } from "../../types";
-import Stars from "../star/Star";
+import Stars from "../star_func/Star_Func";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux";
@@ -17,61 +17,52 @@ const Products: FC<ProductsProps> = ({ items }) => {
   const { data, isLoading } = useGetProductsQuery({ limit: 8 });
   const wishlist = useSelector((state: RootState) => state.wishlist.value);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const products = items || data?.products || [];
 
   if (isLoading)
     return (
-      <div className="mx-auto flex items-center justify-center h-[100px]">
-        <ThreeDot
-          variant="bounce"
-          color="#32cd32"
-          size="medium"
-          text=""
-          textColor=""
-        />
+      <div className="flex justify-center items-center h-24">
+        <ThreeDot variant="bounce" color="#32cd32" size="medium" />
       </div>
-    );
-
-  const productItem = products.map((product: IProduct) => (
-    <div key={product.id} className="w-[270px] h-[322px] relative group">
-      <div className="h-[250px] bg-[#F5F5F5] overflow-hidden relative">
-        <img onClick={() => navigate(`product/${product.id}`)} className="w-full object-contain" src={product.images[0]} alt="" />
-
-        <button
-          className="absolute bottom-0 left-0 w-full bg-black text-white py-2 text-center 
-                         opacity-0 translate-y-5 group-hover:opacity-100 group-hover:translate-y-0 
-                         transition-all duration-300 ease-in-out"
-        >
-          Add To Cart
-        </button>
-      </div>
-
-      <div className="pt-4 flex flex-col">
-        <h2 className="truncate font-medium">{product.title}</h2>
-      </div>
-      <div className="flex gap-2 items-center">
-        <p className="text-[#DB4444] font-medium">${product.price}</p>
-        <Stars rating={product.rating} />
-        <p className="font-medium">({product.stock})</p>
-      </div>
-      <button
-        onClick={() => dispatch(toggleLike(product))}
-        className="absolute top-3 right-3 text-2xl text-primary"
-      >
-        {wishlist?.some((item) => item.id === product.id) ? (
-          <FaHeart />
-        ) : (
-          <FaRegHeart />
-        )}
-      </button>
-    </div>
-  ));
+  );
 
   return (
-    <div className="container mt-[28px] grid grid-cols-4 gap-[30px]">
-      {productItem}
+    <div className="container mx-auto mt-7 px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {products.map((product: IProduct) => (
+          <div key={product.id} className="border rounded-lg shadow-lg relative group overflow-hidden transition-all duration-300">
+            {/* Product Image */}
+            <div className="h-64 bg-gray-100 flex items-center justify-center overflow-hidden">
+              <img
+                onClick={() => navigate(`product/${product.id}`)}
+                className="w-full h-full object-contain cursor-pointer transition-transform duration-300 group-hover:scale-105"
+                src={product.images[0]}
+                alt="product"
+              />
+            </div>
+
+            {/* Product Details */}
+            <div className="p-4 text-center">
+              <h2 className="truncate font-medium text-lg">{product.title}</h2>
+              <div className="flex justify-center items-center gap-2 mt-1">
+                <p className="text-red-500 font-semibold text-lg">${product.price}</p>
+                <Stars rating={product.rating} />
+                <p className="font-medium text-sm">({product.stock})</p>
+              </div>
+            </div>
+
+            {/* Wishlist Icon */}
+            <button
+              onClick={() => dispatch(toggleLike(product))}
+              className="absolute top-3 right-3 text-2xl text-black"
+            >
+              {wishlist.some((item) => item.id === product.id) ? <FaHeart /> : <FaRegHeart />}
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

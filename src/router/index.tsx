@@ -7,6 +7,10 @@ import Detail from "../pages/detail/Detail";
 import SignIn from "../pages/auth/sign-in/SignIn";
 import Auth from "../pages/auth/Auth";
 import Account from "../pages/account/Account";
+import Contacts from "../pages/contact/Contacts";
+import Abouts from "../pages/about/Abouts";
+import Carts from "../pages/cart/Carts";
+import Sign_Up from "../pages/sign_up.tsx/Sign_Up";
 
 const Routers = () => {
   return useRoutes([
@@ -16,6 +20,10 @@ const Routers = () => {
       children: [
         { path: "/", element: <Home /> },
         { path: "wishlist", element: <Wishlist /> },
+        { path: "contact", element: <Contacts /> },
+        { path: "about", element: <Abouts /> },
+        { path: "cart", element: <Carts /> },
+        { path: "signup", element: <Sign_Up /> },
         { path: "product/:id", element: <Detail /> },
         {
           path: "auth",

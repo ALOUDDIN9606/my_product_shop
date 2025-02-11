@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useGetProductByIdQuery } from "../../redux/api/product";
-import Stars from "../../components/star/Star";
+import Stars from "../../components/star_func/Star_Func";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux";
