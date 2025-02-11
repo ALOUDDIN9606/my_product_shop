@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux";
 import { toggleLike } from "../../redux/features/wishlist-slice";
 import { useNavigate } from "react-router-dom";
-import { ThreeDot } from "react-loading-indicators";
 
 interface ProductsProps {
   items?: IProduct[];
@@ -21,12 +20,25 @@ const Products: FC<ProductsProps> = ({ items }) => {
 
   const products = items || data?.products || [];
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-24">
-        <ThreeDot variant="bounce" color="#32cd32" size="medium" />
+      <div className="container mx-auto mt-7 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div key={index} className="border rounded-lg shadow-lg p-4 animate-pulse">
+              <div className="h-64 bg-gray-300 rounded-md"></div>
+              <div className="mt-4 h-6 bg-gray-300 rounded w-3/4"></div>
+              <div className="mt-2 h-4 bg-gray-300 rounded w-1/2"></div>
+              <div className="mt-4 flex justify-center gap-2">
+                <div className="h-5 w-10 bg-gray-300 rounded"></div>
+                <div className="h-5 w-20 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-  );
+    );
+  }
 
   return (
     <div className="container mx-auto mt-7 px-4">
